@@ -26,10 +26,10 @@ public class User {
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)// to restrict password for write only mode
     private String password;
-    @JsonIgnore
+
     private USER_ROLE role=USER_ROLE.ROLE_CUSTOMER;
 
-    @JsonIgnore// to ignore order list while fetching user
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")// inside order entity we have user model called customer
     private List<Order> orders = new ArrayList<>();
 
