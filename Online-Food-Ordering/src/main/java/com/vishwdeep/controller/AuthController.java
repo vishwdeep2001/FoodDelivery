@@ -70,6 +70,7 @@ public class AuthController {
         authResponse.setJwt(jwt);
         authResponse.setMessage("Registered successfully");
         authResponse.setRole(savedUser.getRole());
+        System.out.println("Saved user role"+savedUser.getRole());
 
 return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }

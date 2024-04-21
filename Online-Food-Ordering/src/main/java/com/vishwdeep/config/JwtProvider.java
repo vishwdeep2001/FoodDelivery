@@ -15,16 +15,18 @@ public class JwtProvider {
     private SecretKey key= Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
     public String generateToken(Authentication auth){
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+        System.out.println("Emails"+auth.getName());
+        System.out.println("Authorities"+authorities);
         String roles = populateAuthorities(authorities);
-
+        System.out.println(roles+"roles");
         String jwt = Jwts.builder().setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + 864000000))
-                .claim("email",auth.getName())
-                .claim("authorities",roles)
+                .claim("email", auth.getName())
+                .claim("authorities", roles) // Include the user's roles as authorities
                 .signWith(key)
                 .compact();
-
-        return  jwt;
+        System.out.println(jwt.toString());
+        return jwt;
     }
 
     public  String getEmailFromJwtToken(String jwt){

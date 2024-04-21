@@ -22,7 +22,7 @@ import java.util.List;
 public class JwtTokenValidator extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
+    protected void doFilterInternal( HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     String jwt = request.getHeader(JwtConstant.JWT_HEADER);
 
@@ -33,11 +33,14 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             SecretKey key= Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
             Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
             String email = String.valueOf(claims.get("email"));
+            System.out.println("Email"+ email);
             String authorities = String.valueOf((claims.get("authorities")));
+            System.out.println("authori"+authorities);
             //ROLE_CUSTOMER,ROLE_ADMIN
 
             List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
-
+            System.out.println(auth);
+            System.out.println(authorities);
             Authentication authentication = new UsernamePasswordAuthenticationToken(email,null,auth);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

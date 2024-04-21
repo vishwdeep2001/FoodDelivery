@@ -23,8 +23,12 @@ public class AdminRestaurantController {
 
     @PostMapping()
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody CreateRestaurantRequest req, @RequestHeader("Authorization") String jwt) throws Exception {
+        System.out.println("Inside post ");
         User user = userService.findUserByJwtToken(jwt);
+        System.out.println(user);
         Restaurant restaurant = restaurantService.createRestaurant(req, user);
+        System.err.printf(user.toString());
+        System.err.println(restaurant.toString());
         return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
     }
 
