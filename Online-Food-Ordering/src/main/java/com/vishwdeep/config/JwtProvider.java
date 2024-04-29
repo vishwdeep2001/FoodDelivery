@@ -15,20 +15,21 @@ public class JwtProvider {
     private SecretKey key= Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
     public String generateToken(Authentication auth){
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-        System.out.println("Emails"+auth.getName());
-        System.out.println("Authorities"+authorities);
+        System.out.println("Email: " + auth.getName());
+        System.out.println("Authorities: " + authorities);
         String roles = populateAuthorities(authorities);
-        System.out.println(roles+"roles");
-        String jwt = Jwts.builder().setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + 864000000))
+        System.out.println("Roles: " + roles);
+
+        String jwt = Jwts.builder()
+                .setIssuedAt(new Date())
+                .setExpiration((new Date(new Date().getTime() + 864000000)))
                 .claim("email", auth.getName())
-                .claim("authorities", roles) // Include the user's roles as authorities
+                .claim("authorities", roles)
                 .signWith(key)
                 .compact();
-        System.out.println(jwt.toString());
+        System.out.println(jwt);
         return jwt;
     }
-
     public  String getEmailFromJwtToken(String jwt){
         jwt= jwt.substring(7);//Bearer_
         Claims claims= Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();

@@ -42,6 +42,8 @@ public class AuthController {
     private CustomerUserDetailsService customerUserDetailsService;
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandles(@RequestBody User user) throws Exception {
@@ -49,6 +51,7 @@ public class AuthController {
         if(isEmailExist!=null) {
           throw new Exception("Email already exists with another account");
         }
+        USER_ROLE userRole = user.getRole() != null ? user.getRole() : USER_ROLE.ROLE_CUSTOMER;
         User createdUser =  new User();
         createdUser.setEmail(user.getEmail());
         createdUser.setFullName(user.getFullName());
@@ -63,12 +66,18 @@ public class AuthController {
         cart.setCustomer(savedUser);
         cartRepository.save(cart);
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getEmail());
+
+// Construct Authentication object with UserDetails and roles
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+// Generate JWT token
         String jwt = jwtProvider.generateToken(authentication);
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(jwt);
         authResponse.setMessage("Registered successfully");
+        System.out.println(savedUser.getRole()+"Role saved");
         authResponse.setRole(savedUser.getRole());
         System.out.println("Saved user role"+savedUser.getRole());
 

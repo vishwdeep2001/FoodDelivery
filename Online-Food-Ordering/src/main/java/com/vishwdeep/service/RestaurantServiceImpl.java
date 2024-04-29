@@ -7,8 +7,7 @@ import com.vishwdeep.model.User;
 import com.vishwdeep.repository.AddressRepository;
 import com.vishwdeep.repository.UserRepository;
 import com.vishwdeep.request.CreateRestaurantRequest;
-import com.vishwdeep.request.RestaurantRepository;
-import jakarta.persistence.Access;
+import com.vishwdeep.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,7 @@ public class RestaurantServiceImpl implements RestaurantService{
         Address address =  addressRepository.save(req.getAddress());
         Restaurant restaurant = new Restaurant();
         restaurant.setAddress(address);
-
+        restaurant.setDescription(req.getDescription());
         restaurant.setContactInformation(req.getContactInformation());
         restaurant.setCuisineType(req.getCuisineType());
         restaurant.setImages(req.getImages());

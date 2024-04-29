@@ -26,6 +26,7 @@ public class AdminRestaurantController {
         System.out.println("Inside post ");
         User user = userService.findUserByJwtToken(jwt);
         System.out.println(user);
+        System.err.println(req.toString());
         Restaurant restaurant = restaurantService.createRestaurant(req, user);
         System.err.printf(user.toString());
         System.err.println(restaurant.toString());
@@ -47,10 +48,12 @@ public class AdminRestaurantController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PutMapping("{id}/status")
+    @PutMapping("/{id}/status")
     public ResponseEntity<Restaurant> updateRestaurantStatus(@RequestBody CreateRestaurantRequest req, @RequestHeader("Authorization") String jwt, @PathVariable Long id) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
+        System.err.println(user);
         Restaurant restaurant = restaurantService.updateRestaurantStatus(id);
+        System.err.println(restaurant);
         MessageResponse res= new MessageResponse();
         res.setMessage("Restaurant Status Updated Successfully");
         return new ResponseEntity<>(restaurant, HttpStatus.OK);

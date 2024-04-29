@@ -22,7 +22,8 @@ public class IngredientsCategory {
     @JsonIgnore
     @ManyToOne
     private Restaurant restaurant;
-
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<IngredientsItem> ingredients = new ArrayList<>();
 

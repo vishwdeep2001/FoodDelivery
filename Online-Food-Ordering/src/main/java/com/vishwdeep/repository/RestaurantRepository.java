@@ -1,4 +1,4 @@
-package com.vishwdeep.request;
+package com.vishwdeep.repository;
 
 import com.vishwdeep.model.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
