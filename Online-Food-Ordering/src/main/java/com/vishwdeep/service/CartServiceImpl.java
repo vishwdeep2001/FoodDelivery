@@ -31,6 +31,7 @@ public class CartServiceImpl implements CartService{
         User user = userService.findUserByJwtToken(jwt);
         Food food= foodService.findFoodById(req.getFoodId());
         Cart cart = cartRepository.findByCustomerId((long) user.getId());
+        System.err.println(req.getIngredients());
         for(CartItem cartItem : cart.getItem()){
             if(cartItem.getFood().equals(food)){
                 int newQuantity= (int) (cartItem.getQuantity()+req.getQuantity());
@@ -42,6 +43,8 @@ public class CartServiceImpl implements CartService{
         cartItem.setCart(cart);
         cartItem.setQuantity(Math.toIntExact((req.getQuantity())));
         cartItem.setTotalPrice(req.getQuantity()* food.getPrice());
+        System.err.println(req.getIngredients());
+        cartItem.setIngredients(req.getIngredients());
         CartItem savedCartItem= cartItemRepository.save(cartItem);
         cart.getItem().add(savedCartItem);
 
