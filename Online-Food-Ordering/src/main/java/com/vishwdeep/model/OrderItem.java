@@ -27,5 +27,8 @@ public class OrderItem {
     private List<String> ingredients;
 
 
-
+    @Override
+    public String toString() {
+        return "OrderItem{id=" + id + ", food='" + food.getName() + "', quantity=" + quantity + ", totalPrice=" + totalPrice + "}";
+    }
 }

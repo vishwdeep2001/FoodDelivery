@@ -31,6 +31,7 @@ public class User {
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")// inside order entity we have user model called customer
+    @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 
     @ElementCollection
@@ -38,4 +39,9 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)//so than when user deleted all his address also get deleted
     private List<Address> addresses = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", fullName='" + fullName + "', email='" + email + "', role='" + role + "'}";
+    }
 }

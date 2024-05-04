@@ -32,13 +32,17 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Order createOrder(OrderRequest req, User user) throws Exception {
+        System.err.println(req.getDeliveryAddress());
         Address shipAddress = req.getDeliveryAddress();
         Address savedAddress= addressRepository.save(shipAddress);
+        System.err.println(savedAddress);
         if(!user.getAddresses().contains(savedAddress)){
             user.getAddresses().add(savedAddress);
             userRepository.save(user);
         }
+        System.err.println(req.getRestaurantId());
         Restaurant restaurant = restaurantService.findRestaurantById(req.getRestaurantId());
+        System.err.println(restaurant);
         Order createdOrder = new Order();
         createdOrder.setCustomer(user);
         createdOrder.setCreatedAt(new Date());

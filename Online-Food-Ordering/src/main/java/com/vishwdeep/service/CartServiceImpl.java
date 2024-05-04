@@ -29,23 +29,27 @@ public class CartServiceImpl implements CartService{
     @Override
     public CartItem addItemToCart(AddCartItemRequest req, String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
-        Food food= foodService.findFoodById(req.getFoodId());
+        Food food = foodService.findFoodById(req.getFoodId());
         Cart cart = cartRepository.findByCustomerId((long) user.getId());
-        System.err.println(req.getIngredients());
-        for(CartItem cartItem : cart.getItem()){
-            if(cartItem.getFood().equals(food)){
-                int newQuantity= (int) (cartItem.getQuantity()+req.getQuantity());
-                return updateCartItemQuantity(cartItem.getId(),newQuantity);
+
+// Check if the item already exists in the cart
+        boolean itemExists = false;
+        for (CartItem cartItem : cart.getItem()) {
+            if (cartItem.getFood().equals(food)) {
+                int newQuantity = (int) (cartItem.getQuantity() + req.getQuantity());
+                return updateCartItemQuantity(cartItem.getId(), newQuantity);
             }
         }
-        CartItem cartItem= new CartItem();
+
+// If the item does not exist in the cart, create a new CartItem
+        CartItem cartItem = new CartItem();
         cartItem.setFood(food);
         cartItem.setCart(cart);
-        cartItem.setQuantity(Math.toIntExact((req.getQuantity())));
-        cartItem.setTotalPrice(req.getQuantity()* food.getPrice());
-        System.err.println(req.getIngredients());
+        cartItem.setQuantity(Math.toIntExact(req.getQuantity()));
+        cartItem.setTotalPrice(req.getQuantity() * food.getPrice());
         cartItem.setIngredients(req.getIngredients());
-        CartItem savedCartItem= cartItemRepository.save(cartItem);
+
+        CartItem savedCartItem = cartItemRepository.save(cartItem);
         cart.getItem().add(savedCartItem);
 
         return savedCartItem;
@@ -82,7 +86,7 @@ public class CartServiceImpl implements CartService{
     public Long calculateCartTotals(Cart cart) throws Exception {
         Long total =0L;
         for (CartItem cartItem: cart.getItem()) {
-            total =(long) (cartItem.getFood().getPrice()*(long)cartItem.getQuantity());
+            total +=(long) (cartItem.getFood().getPrice()*(long)cartItem.getQuantity());
 
         }
 

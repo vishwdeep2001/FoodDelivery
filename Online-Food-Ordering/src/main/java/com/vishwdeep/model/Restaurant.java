@@ -1,5 +1,6 @@
 package com.vishwdeep.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class Restaurant {
     private String openingHours;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonBackReference
     private List<Order> orders = new ArrayList<>();
 
     @ElementCollection
@@ -51,6 +53,9 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Food> foods = new ArrayList<>();
 
-
+    @Override
+    public String toString() {
+        return "Restaurant{id=" + id + ", name='" + name + "', description='" + description + "', cuisineType='" + cuisineType + "'}";
+    }
 
 }

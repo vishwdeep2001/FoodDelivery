@@ -10,4 +10,9 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Override
+    public String toString() {
+        return "Address{id=" + id + "}";
+    }
 }

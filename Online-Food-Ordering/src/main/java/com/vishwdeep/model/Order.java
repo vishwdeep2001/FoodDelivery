@@ -1,5 +1,6 @@
 package com.vishwdeep.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vishwdeep.dto.RestaurantDto;
 import jakarta.persistence.*;
@@ -20,6 +21,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
+    @JsonBackReference
     private User customer;
     @JsonIgnore
     @ManyToOne
@@ -40,4 +42,9 @@ public class Order {
 
     //private Payment payment;
     private Long totalPrice;
+
+    @Override
+    public String toString() {
+        return "Order{id=" + id + ", customer='" + customer.getFullName() + "', orderStatus='" + orderStatus + "', createdAt='" + createdAt + "'}";
+    }
 }
